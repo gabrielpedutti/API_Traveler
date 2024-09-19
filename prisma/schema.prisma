@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -20,12 +14,13 @@ model Usuario {
   data_nascimento       DateTime
   email                 String    @unique
   senha                 String
-  cidade_residencia_id  Int
+  cidade_residencia_id  Int       //rever
   tipo                  String
   CreatedAt             DateTime  @default(now())
   UpdatedAt             DateTime  @updatedAt
 
   despesas              Despesa[] @relation("UsuarioDespesas")
+  viagens               Viagem[]  @relation("UsuarioViagens")
 
   //TODO: Adicionar relacionamento com cidade
   //cidade_residencia Cidade @relation(fields: [cidade_residencia_id], references: [ID])
@@ -33,26 +28,100 @@ model Usuario {
 }
 
 model Cidade {
-  ID Int @id @default(autoincrement())
-  nome String
-  estado String
-  pais String
-  latitude Float
+  ID        Int     @id @default(autoincrement())
+  nome      String
+  estado    String
+  pais      String
+  latitude  Float
   longitude Float
-
+  //TODO relação com viagem/destinos
   @@map("cidades")
 }
 
 model Despesa {
-  ID Int @id @default(autoincrement())
-  descricao String
-  valor Float
-  data DateTime
-  usuario_id  Int       
-  usuario     Usuario   @relation("UsuarioDespesas", fields: [usuario_id], references: [ID])
-  categoria_id Int
-  CreatedAt DateTime @default(now())
-  UpdatedAt DateTime @updatedAt
+  ID            Int           @id @default(autoincrement())
+  descricao     String
+  valor         Float
+  data          DateTime
+  usuario_id    Int       
+  usuario       Usuario       @relation("UsuarioDespesas", fields: [usuario_id], references: [ID])
+  viagem_id     Int       
+  viagem        Viagem   @relation("ViagemDespesas", fields: [viagem_id], references: [ID])
+  categoria_id  Int
+  CreatedAt     DateTime      @default(now())
+  UpdatedAt     DateTime      @updatedAt
+
+  passeios      Passeio[]     @relation("DespesaPasseios")
+  hospedagens   Hospedagem[]  @relation("DespesaHospedagens")
+  transportes   Transporte[]  @relation("DespesaTransportes")
 
   @@map("despesas")
+}
+
+model Hospedagem {
+  ID            Int           @id @default(autoincrement())
+  nome          String
+  tipo          String
+  data_checkin  DateTime
+  data_checkout DateTime
+  despesa_id    Int       
+  despesa       Despesa       @relation("DespesaHospedagens", fields: [despesa_id], references: [ID])
+  viagem_id     Int       
+  viagem        Viagem        @relation("ViagemHospedagens", fields: [viagem_id], references: [ID])
+  categoria_id  Int
+  CreatedAt     DateTime      @default(now())
+  UpdatedAt     DateTime      @updatedAt
+
+  @@map("hospedagens")
+}
+
+model Passeio {
+  ID            Int           @id @default(autoincrement())
+  nome          String
+  tipo          String
+  data          DateTime
+  despesa_id    Int       
+  despesa       Despesa       @relation("DespesaPasseios", fields: [despesa_id], references: [ID])
+  viagem_id     Int       
+  viagem        Viagem        @relation("ViagemPasseios", fields: [viagem_id], references: [ID])
+  CreatedAt     DateTime      @default(now())
+  UpdatedAt     DateTime      @updatedAt
+
+  @@map("passeios")
+}
+
+model Transporte {
+  ID            Int           @id @default(autoincrement())
+  nome          String
+  tipo          String
+  data          DateTime
+  despesa_id    Int       
+  despesa       Despesa       @relation("DespesaTransportes", fields: [despesa_id], references: [ID])
+  viagem_id     Int       
+  viagem        Viagem   @relation("ViagemTransportes", fields: [viagem_id], references: [ID])
+  CreatedAt     DateTime      @default(now())
+  UpdatedAt     DateTime      @updatedAt
+
+  @@map("transportes")
+}
+
+model Viagem {
+  ID                   Int @id @default(autoincrement())
+  nome                String
+  descricao           String
+  cidade_partida_id   Float
+  data_inicio         DateTime
+  data_fim            DateTime
+  usuario_id          Int       
+  usuario             Usuario   @relation("UsuarioViagens", fields: [usuario_id], references: [ID])
+  categoria_id        Int
+  CreatedAt           DateTime @default(now())
+  UpdatedAt           DateTime @updatedAt
+
+  passeios Passeio[] @relation("ViagemPasseios")
+  hospedagens Hospedagem[] @relation("ViagemHospedagens")
+  transportes Transporte[] @relation("ViagemTransportes")
+  despesas Despesa[] @relation("ViagemDespesas")
+
+  @@map("viagens")
 }
