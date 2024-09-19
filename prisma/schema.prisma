@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+
+  ID Int @id @default(autoincrement())
+  nome                  String
+  data_nascimento       DateTime
+  email                 String    @unique
+  senha                 String
+  cidade_residencia_id  Int
+  tipo                  String
+  CreatedAt             DateTime  @default(now())
+  UpdatedAt             DateTime  @updatedAt
+
+  despesas              Despesa[] @relation("UsuarioDespesas")
+
+  //TODO: Adicionar relacionamento com cidade
+  //cidade_residencia Cidade @relation(fields: [cidade_residencia_id], references: [ID])
+  @@map("usuarios")
+}
+
+model Cidade {
+  ID Int @id @default(autoincrement())
+  nome String
+  estado String
+  pais String
+  latitude Float
+  longitude Float
+
+  @@map("cidades")
+}
+
+model Despesa {
+  ID Int @id @default(autoincrement())
+  descricao String
+  valor Float
+  data DateTime
+  usuario_id  Int       
+  usuario     Usuario   @relation("UsuarioDespesas", fields: [usuario_id], references: [ID])
+  categoria_id Int
+  CreatedAt DateTime @default(now())
+  UpdatedAt DateTime @updatedAt
+
+  @@map("despesas")
+}
