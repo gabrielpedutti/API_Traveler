@@ -73,7 +73,7 @@ model TipoPasseio {
 model Usuario {
   id                 Int          @id @default(autoincrement())
   nome               String
-  data_nascimento    Date
+  data_nascimento    DateTime
   email              String       @unique
   senha              String
   cidade             Int
