@@ -9,7 +9,7 @@ datasource db {
 
 model TipoCadastro {
   id            Int     @id @default(autoincrement())
-  tipo_cadastro String  @unique
+  descricao          String  @unique
 
   usuarios      Usuario[] @relation("UsuarioCadastro")
 
@@ -18,7 +18,7 @@ model TipoCadastro {
 
 model TipoUsuario {
   id            Int     @id @default(autoincrement())
-  tipo_usuario  String  @unique
+  descricao     String  @unique
 
   usuarios      Usuario[] @relation("UsuarioTipo")
 
@@ -27,7 +27,7 @@ model TipoUsuario {
 
 model StatusViagem {
   id            Int     @id @default(autoincrement())
-  status_viagem String  @unique
+  descricao     String  @unique
 
   viagens       Viagem[] @relation("ViagemStatus")
 
@@ -36,7 +36,7 @@ model StatusViagem {
 
 model TipoDespesa {
   id            Int     @id @default(autoincrement())
-  tipo_despesa  String  @unique
+  descricao     String  @unique
 
   despesas      Despesa[] @relation("DespesaTipo")
 
@@ -45,7 +45,7 @@ model TipoDespesa {
 
 model TipoTransporte {
   id             Int     @id @default(autoincrement())
-  tipo_transporte String  @unique
+  descricao      String  @unique
 
   transportes    Transporte[] @relation("TransporteTipo")
 
@@ -54,7 +54,7 @@ model TipoTransporte {
 
 model TipoHospedagem {
   id              Int     @id @default(autoincrement())
-  tipo_hospedagem String  @unique
+  descricao       String  @unique
 
   hospedagens     Hospedagem[] @relation("HospedagemTipo")
 
@@ -63,7 +63,7 @@ model TipoHospedagem {
 
 model TipoPasseio {
   id            Int     @id @default(autoincrement())
-  tipo_passeio  String  @unique
+  descricao     String  @unique
 
   passeios      Passeio[] @relation("PasseioTipo")
 
@@ -73,7 +73,7 @@ model TipoPasseio {
 model Usuario {
   id                 Int          @id @default(autoincrement())
   nome               String
-  data_nascimento    DateTime
+  data_nascimento    Date
   email              String       @unique
   senha              String
   cidade             Int
