@@ -1,4 +1,7 @@
+// import {Request, Response, NextFunction} from 'express';
 import { routes } from './routes'
+import "express-async-errors";
+import { AppError } from './errors/AppError';
 
 const express = require('express')
 
@@ -13,5 +16,19 @@ app.use(express.urlencoded({ extended: true }));
 const port = 3333;
 
 app.use(routes);
+
+app.use((err: Error, request: express.Request, response: express.Response, next: express.NextFunction) => {
+  if (err instanceof AppError) {
+    return response.status(err.statusCode).json({
+      status: "error",
+      message: err.message
+    });
+  }
+
+  return response.status(500).json({
+    status: "error",
+    message: `Internal server error - ${err.message}`
+  });
+})
 
 app.listen(port, () => console.log(`Server is running in port ${port}`))

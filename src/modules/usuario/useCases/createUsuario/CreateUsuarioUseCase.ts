@@ -1,6 +1,7 @@
 import { Usuario } from "@prisma/client";
 import { prisma } from "../../../../prisma/client";
 import { CreateUsuarioDTO } from "../../dtos/CreateUserDTO";
+import { AppError } from "../../../../errors/AppError";
 
 export class CreateUsuarioUseCase {
   async execute(data: CreateUsuarioDTO): Promise<Usuario> {
@@ -13,7 +14,7 @@ export class CreateUsuarioUseCase {
     });
 
     if (usuarioJaCriado) {                 
-      throw new Error('Usuário já cadastrado');
+      throw new AppError('Usuário já existe!');
     }
 
     try {
