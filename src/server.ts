@@ -1,4 +1,4 @@
-// import {Request, Response, NextFunction} from 'express';
+import e from 'express';
 import { routes } from './routes'
 import "express-async-errors";
 import { AppError } from './errors/AppError';
@@ -17,7 +17,7 @@ const port = 3333;
 
 app.use(routes);
 
-app.use((err: Error, request: express.Request, response: express.Response, next: express.NextFunction) => {
+app.use((err: Error, request: e.Request, response: e.Response, next: e.NextFunction) => {
   if (err instanceof AppError) {
     return response.status(err.statusCode).json({
       status: "error",
