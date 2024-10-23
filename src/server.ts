@@ -6,6 +6,15 @@ import { AppError } from './errors/AppError';
 const express = require('express')
 
 const app = express();
+const cors = require('cors');
+app.use(cors());
+const corsOptions = {
+  origin: '*', // Permitir todas as origens (isso pode ser ajustado para uma origem específica em produção)
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
 
 // Middleware para interpretar JSON
 app.use(express.json());

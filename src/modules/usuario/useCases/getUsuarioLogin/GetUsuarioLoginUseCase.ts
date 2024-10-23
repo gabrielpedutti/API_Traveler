@@ -18,9 +18,9 @@ export class GetUsuarioLoginUseCase {
       return usuario;
     } catch (error) {
       if (error.code === "P2025") {
-        throw new AppError('Usuário não encontrado!');
+        throw new AppError('Usuário ou Senha inválidos!', 404);
       }
-      throw new AppError('Erro ao buscar o usuário: ' + error.message);
+      throw new AppError('Erro ao buscar o usuário: ' + error.message, 500);
     }
   }
 }

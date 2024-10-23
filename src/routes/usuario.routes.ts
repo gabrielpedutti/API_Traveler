@@ -15,7 +15,7 @@ const usuarioRoutes = Router();
 
 usuarioRoutes.post("/", createUsuarioController.handle);
 usuarioRoutes.get("/", getAllUsuariosController.handle);
-usuarioRoutes.get("/login", getUsuarioLoginController.handle);
+usuarioRoutes.post("/login", getUsuarioLoginController.handle);
 usuarioRoutes.delete('/:id/delete', deleteUsuarioController.handle);
 usuarioRoutes.put('/:id/update', updateUsuarioController.handle);
 
