@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { DeleteUsuarioUseCase } from "./DeleteUsuarioUseCase";
 
 export class DeleteUsuarioController {
-  async handle(req: Request, res: Response): Promise<Response> {
+  async handle(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 
     const { id } = req.params;
 
@@ -14,7 +14,7 @@ export class DeleteUsuarioController {
       return res.status(201).json(result);
 
     } catch (error) {
-      return res.status(400).json({ message: error.message });
+      next(error);
     }
   }
 }

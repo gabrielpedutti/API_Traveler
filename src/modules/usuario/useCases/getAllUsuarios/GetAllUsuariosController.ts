@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { GetAllUsuariosUseCase } from "./GetAllUsuariosUseCase";
 
 export class GetAllUsuariosController {
-  async handle(req: Request, res: Response): Promise<Response> {
+  async handle(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 
     const getAllUsuariosUseCase = new GetAllUsuariosUseCase();
 
@@ -11,7 +11,7 @@ export class GetAllUsuariosController {
 
       return res.status(201).json(result);
     } catch (error) {
-      return res.status(400).json({ message: error.message });
+      next(error)
     }
   }
 }

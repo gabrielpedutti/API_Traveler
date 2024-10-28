@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { UpdateUsuarioUseCase } from "./UpdateUsuarioUseCase";
 
 export class UpdateUsuarioController {
-  async handle(req: Request, res: Response): Promise<Response> {
+  async handle(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 
     const { id } = req.params;
     const { nome, email, senha, cidade } = req.body;
@@ -17,7 +17,7 @@ export class UpdateUsuarioController {
       return res.status(201).json(result);
 
     } catch (error) {
-      return res.status(400).json({ message: error.message });
+      next(error);
     }
   }
 }

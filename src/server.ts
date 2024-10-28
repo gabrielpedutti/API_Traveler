@@ -1,9 +1,9 @@
 import e from 'express';
 import { routes } from './routes'
-import "express-async-errors";
 import { AppError } from './errors/AppError';
 
 const express = require('express')
+require('express-async-errors');
 
 const app = express();
 const cors = require('cors');
@@ -27,9 +27,11 @@ const port = 3333;
 app.use(routes);
 
 app.use((err: Error, request: e.Request, response: e.Response, next: e.NextFunction) => {
+
   if (err instanceof AppError) {
     return response.status(err.statusCode).json({
       status: "error",
+      statusCode: err.statusCode,
       message: err.message
     });
   }
@@ -38,6 +40,7 @@ app.use((err: Error, request: e.Request, response: e.Response, next: e.NextFunct
     status: "error",
     message: `Internal server error - ${err.message}`
   });
-})
+});
+
 
 app.listen(port, () => console.log(`Server is running in port ${port}`))

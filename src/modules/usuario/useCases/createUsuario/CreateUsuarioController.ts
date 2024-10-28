@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { CreateUsuarioUseCase } from "./CreateUsuarioUseCase";
 
 export class CreateUsuarioController {
-  async handle(req: Request, res: Response): Promise<Response> {
+  async handle(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     console.log(req.body);
     const { nome, data_nascimento, email, senha, cidade, tipo_usuario_id, tipo_cadastro_id } = req.body;
 
@@ -21,7 +21,7 @@ export class CreateUsuarioController {
 
       return res.status(201).json(novoUsuario);
     } catch (error) {
-      return res.status(400).json({ message: error.message });
+      next(error);
     }
   }
 }
