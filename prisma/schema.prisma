@@ -77,7 +77,7 @@ model Usuario {
   email              String       @unique
   senha              String
   municipio          Int
-  municipio_id       Municipio     @relation("UsuarioMunicipio", fields: [cidade_residencia], references: [id])
+  municipio_id       Municipio     @relation("UsuarioMunicipio", fields: [municipio], references: [id])
   tipo_usuario_id    Int
   tipo_usuario       TipoUsuario   @relation("UsuarioTipo", fields: [tipo_usuario_id], references: [id])
   tipo_cadastro_id   Int
@@ -195,30 +195,32 @@ model Viagem {
 }
 
 model Pais {
-  id        Int       @id @default(autoincrement()) @map("id_pais")
-  nome      String    @map("nm_pais")
-  nomeAscii String?   @map("nm_pais_ascii")
+  id            Int       @id @default(autoincrement())
+  nm_pais       String    
+  nm_pais_ascii String?   
   
   estados   Estado[]  @relation("PaisEstados")
+  @@map("paises")
 }
 
 model Estado {
-  id        Int       @id @default(autoincrement()) @map("id_estado")
-  nome      String    @map("nm_estado")
-  nomeAscii String?   @map("nm_estado_ascii")
-  paisId    Int      @map("id_pais")
-  
-  pais      Pais      @relation("PaisEstados", fields: [paisId], references: [id])
-  municipios Municipio[] @relation("EstadoMunicipios")
+  id              Int         @id @default(autoincrement())
+  nm_estado       String
+  nm_estado_ascii String?
+  id_pais         Int      
+
+  pais            Pais        @relation("PaisEstados", fields: [paisId], references: [id])
+  municipios      Municipio[] @relation("EstadoMunicipios")
+  @@map("estados")
 }
 
 model Municipio {
-  id        Int       @id @default(autoincrement()) @map("id_municipio")
-  nome      String    @map("nm_municipio")
-  nomeAscii String?   @map("nm_municipio_ascii")
-  latitude  Float     @map("latitude")
-  longitude Float     @map("longitude")
-  estadoId  Int      @map("id_estado")
+  id                  Int     @id @default(autoincrement())
+  nm_municipio        String
+  nm_municipio_ascii  String?
+  latitude            Float
+  longitude           Float
+  id_estado           Int       
   
   estado    Estado    @relation("EstadoMunicipios", fields: [estadoId], references: [id])
   usuarios  Usuario[] @relation("UsuarioMunicipio")
