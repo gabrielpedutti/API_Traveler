@@ -76,8 +76,8 @@ model Usuario {
   data_nascimento    DateTime
   email              String       @unique
   senha              String
-  municipio          Int
-  municipio_id       Municipio     @relation("UsuarioMunicipio", fields: [municipio], references: [id])
+  municipio_id       Int
+  municipio          Municipio     @relation("UsuarioMunicipio", fields: [municipio_id], references: [id])
   tipo_usuario_id    Int
   tipo_usuario       TipoUsuario   @relation("UsuarioTipo", fields: [tipo_usuario_id], references: [id])
   tipo_cadastro_id   Int
@@ -123,8 +123,8 @@ model Hospedagem {
   despesa       Despesa       @relation("DespesaHospedagens", fields: [despesa_id], references: [id])
   viagem_id     Int
   viagem        Viagem        @relation("ViagemHospedagens", fields: [viagem_id], references: [id])
-  municipio     Int
-  municipio_id  Municipio     @relation("HospedagemMunicipio", fields: [municipio_id], references: [id])
+  municipio_id  Int
+  municipio     Municipio     @relation("HospedagemMunicipio", fields: [municipio_id], references: [id])
   created_at    DateTime      @default(now())
   updated_at    DateTime      @updatedAt
 
@@ -141,8 +141,8 @@ model Passeio {
   despesa       Despesa       @relation("DespesaPasseios", fields: [despesa_id], references: [id])
   viagem_id     Int
   viagem        Viagem        @relation("ViagemPasseios", fields: [viagem_id], references: [id])
-  municipio     Int
-  municipio_id  Municipio     @relation("PasseioMunicipio", fields: [municipio_id], references: [id])
+  municipio_id  Int
+  municipio     Municipio     @relation("PasseioMunicipio", fields: [municipio_id], references: [id])
   created_at    DateTime      @default(now())
   updated_at    DateTime      @updatedAt
 
@@ -159,10 +159,10 @@ model Transporte {
   despesa                 Despesa       @relation("DespesaTransportes", fields: [despesa_id], references: [id])
   viagem_id               Int
   viagem                  Viagem        @relation("ViagemTransportes", fields: [viagem_id], references: [id])
-  transporte_origem       Int
-  transporte_origem_id    Municipio     @relation("TransporteOrigem", fields: [transporte_origem], references: [id])
-  transporte_destino      Int
-  transporte_destino_id   Municipio     @relation("TransporteDestino", fields: [transporte_destino], references: [id])
+  transporte_origem_id    Int
+  transporte_origem       Municipio     @relation("TransporteOrigem", fields: [transporte_origem_id], references: [id])
+  transporte_destino_id   Int
+  transporte_destino      Municipio     @relation("TransporteDestino", fields: [transporte_destino_id], references: [id])
   created_at              DateTime      @default(now())
   updated_at              DateTime      @updatedAt
 
@@ -173,10 +173,10 @@ model Viagem {
   id                  Int @id @default(autoincrement())
   nome                String
   descricao           String
-  viagem_origem       Int
-  viagem_origem_id    Municipio     @relation("ViagemOrigem", fields: [viagem_origem], references: [id])
-  viagem_destino      Int
-  viagem_destino_id   Municipio     @relation("ViagemDestino", fields: [viagem_destino], references: [id])
+  viagem_origem_id    Int
+  viagem_origem       Municipio     @relation("ViagemOrigem", fields: [viagem_origem_id], references: [id])
+  viagem_destino_id   Int
+  viagem_destino      Municipio     @relation("ViagemDestino", fields: [viagem_destino_id], references: [id])
   data_inicio         DateTime
   data_fim            DateTime
   usuario_id          Int
@@ -207,9 +207,9 @@ model Estado {
   id              Int         @id @default(autoincrement())
   nm_estado       String
   nm_estado_ascii String?
-  id_pais         Int      
+  pais_id         Int      
 
-  pais            Pais        @relation("PaisEstados", fields: [paisId], references: [id])
+  pais            Pais        @relation("PaisEstados", fields: [pais_id], references: [id])
   municipios      Municipio[] @relation("EstadoMunicipios")
   @@map("estados")
 }
@@ -220,9 +220,9 @@ model Municipio {
   nm_municipio_ascii  String?
   latitude            Float
   longitude           Float
-  id_estado           Int       
+  estado_id           Int       
   
-  estado    Estado    @relation("EstadoMunicipios", fields: [estadoId], references: [id])
+  estado    Estado    @relation("EstadoMunicipios", fields: [estado_id], references: [id])
   usuarios  Usuario[] @relation("UsuarioMunicipio")
   hospedagens Hospedagem[] @relation("HospedagemMunicipio")
   transportes Transporte[] @relation("TransporteOrigem")
