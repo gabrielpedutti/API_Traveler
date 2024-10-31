@@ -225,8 +225,10 @@ model Municipio {
   estado    Estado    @relation("EstadoMunicipios", fields: [estado_id], references: [id])
   usuarios  Usuario[] @relation("UsuarioMunicipio")
   hospedagens Hospedagem[] @relation("HospedagemMunicipio")
-  transportes Transporte[] @relation("TransporteOrigem")
   passeios   Passeio[] @relation("PasseioMunicipio")
-  viagens    Viagem[] @relation("ViagemOrigem")
+  transporte_origem Transporte[] @relation("TransporteOrigem")
+  transporte_destino Transporte[] @relation("TransporteDestino")
+  viagem_origem    Viagem[] @relation("ViagemOrigem")
+  viagem_destino    Viagem[] @relation("ViagemDestino")
   @@map("municipios")
 } 
