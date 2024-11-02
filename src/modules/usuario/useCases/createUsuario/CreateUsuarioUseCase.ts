@@ -24,7 +24,7 @@ export class CreateUsuarioUseCase {
           data_nascimento: data.data_nascimento,
           email: data.email,
           senha: data.senha, // Idealmente você aplicaria uma hash na senha antes de salvar
-          cidade: data.cidade,
+          municipio_id: data.municipio_id,
           tipo_usuario_id: data.tipo_usuario_id,
           tipo_cadastro_id: data.tipo_cadastro_id,
           created_at: new Date(),

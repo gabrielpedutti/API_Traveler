@@ -3,5 +3,5 @@ export interface UpdateUsuarioDTO {
   nome?: string;
   email?: string;
   senha?: string;
-  cidade?: number | null;
+  municipio_id?: number | null;
 }

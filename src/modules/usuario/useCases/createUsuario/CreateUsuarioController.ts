@@ -4,7 +4,7 @@ import { CreateUsuarioUseCase } from "./CreateUsuarioUseCase";
 export class CreateUsuarioController {
   async handle(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     console.log(req.body);
-    const { nome, data_nascimento, email, senha, cidade, tipo_usuario_id, tipo_cadastro_id } = req.body;
+    const { nome, data_nascimento, email, senha, municipio_id, tipo_usuario_id, tipo_cadastro_id } = req.body;
 
     const createUsuarioUseCase = new CreateUsuarioUseCase();
 
@@ -14,7 +14,7 @@ export class CreateUsuarioController {
         data_nascimento,
         email,
         senha,
-        cidade,
+        municipio_id,
         tipo_usuario_id,
         tipo_cadastro_id
       });

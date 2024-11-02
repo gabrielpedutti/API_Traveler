@@ -11,11 +11,11 @@ export class UpdateUsuarioUseCase {
     if (data.nome && data.nome != null) updateData.nome = data.nome;
     if (data.email && data.email != null) updateData.email = data.email;
     if (data.senha && data.senha != null) updateData.senha = data.senha;
-    if (data.cidade && data.cidade != null && data.cidade !== undefined) updateData.cidade = data.cidade;
+    if (data.municipio_id && data.municipio_id != null && data.municipio_id !== undefined) updateData.municipio_id = data.municipio_id;
 
     try {
 
-      const hasOptionalField = data.nome || data.email || data.senha || data.cidade !== undefined;
+      const hasOptionalField = data.nome || data.email || data.senha || data.municipio_id !== undefined;
 
       if (!data.id || !hasOptionalField) {
         throw new AppError('Pelo menos um campo deve ser preenchido para atualizar os dados do usuário.');

@@ -3,7 +3,7 @@ export interface CreateUsuarioDTO {
   data_nascimento: Date;
   email: string;
   senha: string;
-  cidade: number;
+  municipio_id: number;
   tipo_usuario_id: number;
   tipo_cadastro_id: number;
 }
