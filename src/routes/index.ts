@@ -5,6 +5,7 @@ import { transporteRoutes } from "./transporte.routes";
 import { viagemRoutes } from "./viagem.routes";
 import { despesaRoutes } from "./despesa.routes";
 import { hospedagemRoutes } from "./hospedagem.routes";
+import { passeioRoutes } from "./passeio.routes";
 
 const routes = Router();
 
@@ -14,5 +15,6 @@ routes.use("/transporte", transporteRoutes);
 routes.use("/viagem", viagemRoutes);
 routes.use("/despesa", despesaRoutes);
 routes.use("/hospedagem", hospedagemRoutes);
+routes.use("/passeio", passeioRoutes);
 
 export { routes };
