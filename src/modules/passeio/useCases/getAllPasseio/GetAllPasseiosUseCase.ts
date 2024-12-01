@@ -3,7 +3,7 @@ import { prisma } from "../../../../prisma/client";
 
 export class GetAllPasseiosUseCase {
   async execute(): Promise<Passeio[]> {
-    const passeios = await prisma.passeios.findMany({});
+    const passeios = await prisma.passeio.findMany({});
     
     return passeios;
   }

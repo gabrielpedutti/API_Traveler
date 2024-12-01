@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { UpdateTransporteUseCase } from "./UpdateTransporteUseCase";
+import { UpdatePasseioUseCase } from "./UpdatePasseioUseCase";
 
-export class UpdateTransporteController {
+export class UpdatePasseioController {
   async handle(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     const { id } = req.params;
     const {
@@ -9,23 +9,21 @@ export class UpdateTransporteController {
       tipo_id,
       despesa_id,
       viagem_id,
-      transporte_origem_id,
-      transporte_destino_id,
+      municipio_id,
       data,
     } = req.body;
 
-    const updateTransporteUseCase = new UpdateTransporteUseCase();
+    const updatePasseioUseCase = new UpdatePasseioUseCase();
 
     try {
-      const result = await updateTransporteUseCase.execute({
+      const result = await updatePasseioUseCase.execute({
         id: Number(id),
         nome,
         tipo_id,
         despesa_id,
         viagem_id,
-        transporte_origem_id,
-        transporte_destino_id,
-        data,
+        municipio_id,
+        data
       });
 
       return res.status(200).json(result); // Status 200 para sucesso

@@ -29,10 +29,9 @@ export class CreatePasseioUseCase {
           nome: data.nome,
           tipo_id: data.tipo_id,
           data: data.data,
-          despesa_id: data.despesa_id, //rever
+          despesa_id: data.despesa_id,
           viagem_id: data.viagem_id,
-          transporte_origem_id: data.transporte_origem_id,
-          transporte_destino_id: data.transporte_destino_id,
+          municipio_id: data.municipio_id,
           created_at: new Date(),
         },
       });
