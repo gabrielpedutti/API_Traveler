@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express";
-import { GetAllTransportesUseCase } from "./GetAllTransportesUseCase";
+import { GetAllPasseiosUseCase } from "./GetAllPasseiosUseCase";
 
-export class GetAllTransportesController {
+export class GetAllPasseiosController {
   async handle(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 
-    const getAllTransportesUseCase = new GetAllTransportesUseCase();
+    const getAllPasseiosUseCase = new GetAllPasseiosUseCase();
 
     try {
-      const result = await getAllTransportesUseCase.execute();
+      const result = await getAllPasseiosUseCase.execute();
 
       return res.status(201).json(result);
     } catch (error) {

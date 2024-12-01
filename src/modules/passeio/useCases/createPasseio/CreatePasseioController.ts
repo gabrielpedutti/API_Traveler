@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from "express";
-import { CreateTransporteUseCase } from "./CreateTransporteUseCase";
+import { CreatePasseioUseCase } from "./CreatePasseioUseCase";
 
-export class CreateTransporteController {
+export class CreatePasseioController {
   async handle(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     const { nome, tipo_id, data, despesa_id, viagem_id, transporte_origem_id, transporte_destino_id } = req.body;
 
-    const createTransporteUseCase = new CreateTransporteUseCase();
+    const createPasseioUseCase = new CreatePasseioUseCase();
 
     try {
-      const novoTransporte = await createTransporteUseCase.execute({
+      const novoPasseio = await createPasseioUseCase.execute({
         nome,
         tipo_id,
         data,
@@ -18,7 +18,7 @@ export class CreateTransporteController {
         transporte_destino_id,
       });
 
-      return res.status(201).json(novoTransporte);
+      return res.status(201).json(novoPasseio);
     } catch (error) {
       next(error);
     }

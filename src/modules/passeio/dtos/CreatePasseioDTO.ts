@@ -1,7 +1,7 @@
-export interface CreateTransporteDTO {
+export interface CreatePasseioDTO {
     nome: string;
     tipo_id: number;
-    data: Date;
+    data: Date;    //rever
     despesa_id: number;
     viagem_id: number;
     municipio_id: number;

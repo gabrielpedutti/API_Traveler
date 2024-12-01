@@ -3,8 +3,8 @@ import { usuarioRoutes } from "./usuario.routes";
 import { locationsRoutes } from "./locations.routes";
 import { transporteRoutes } from "./transporte.routes";
 import { viagemRoutes } from "./viagem.routes";
-import { despesaRoutes } from "./despesa.route";
-import { hospedagemRoutes } from "./hospedagem.route";
+import { despesaRoutes } from "./despesa.routes";
+import { hospedagemRoutes } from "./hospedagem.routes";
 
 const routes = Router();
 

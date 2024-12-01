@@ -8,7 +8,8 @@ export class CreateHospedagemController {
     const createHospedagemUseCase = new CreateHospedagemUseCase();
 
     try {
-      const novaHospedagem = await CreateHospedagemUseCase.execute({
+      const novaHospedagem = await createHospedagemUseCase.execute({ 
+        //estraguei aqui: const novaHospedagem = await createHospedagemUseCase.execute
         nome,
         tipo_id,
         data_checkin,
