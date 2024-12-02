@@ -4,7 +4,7 @@ import { GetAllPasseiosController } from "../modules/passeio/useCases/getAllPass
 import { DeletePasseioController } from "../modules/passeio/useCases/deletePasseio/DeletePasseioController";
 import { UpdatePasseioController } from "../modules/passeio/useCases/updatePasseio/UpdatePasseioController";
 import { GetPasseioController } from "../modules/passeio/useCases/getPasseio/GetPasseioController";
-import { GetAllPasseiosPorUsuarioController } from "../modules/passeio/useCases/getAllPasseiosPorUsuario/GetAllPasseiosPorUsuarioController";
+import { GetAllPasseiosPorUsuarioController } from "../modules/passeio/useCases/getAllPasseioPorUsuario/GetAllPasseiosPorUsuarioController";
 
 const createPasseioController = new CreatePasseioController();
 const getPasseioController = new GetPasseioController();

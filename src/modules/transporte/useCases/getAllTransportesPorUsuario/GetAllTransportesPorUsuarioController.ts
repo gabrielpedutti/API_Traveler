@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { GetAllTransportesPorUsuarioUseCase } from "./GetAllTransportesPorUsuarioUseCase";
 
-export class GetAllPasseiosPorUsuarioController {
+export class GetAllTransportesPorUsuarioController {
   async handle(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     const { id } = req.params;
     const getAllTransportesPorUsuarioUseCase = new GetAllTransportesPorUsuarioUseCase();
