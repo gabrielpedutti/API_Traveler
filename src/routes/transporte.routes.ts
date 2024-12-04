@@ -5,6 +5,7 @@ import { DeleteTransporteController } from "../modules/transporte/useCases/delet
 import { UpdateTransporteController } from "../modules/transporte/useCases/updateTransporte/UpdateTransporteController";
 import { GetTransporteController } from "../modules/transporte/useCases/getTransporte/GetTransporteController";
 import { GetAllTransportesPorUsuarioController } from "../modules/transporte/useCases/getAllTransportesPorUsuario/GetAllTransportesPorUsuarioController";
+//import { GetAllTipoTransportesController } from "../modules/transporte/useCases/getAllTipoTransportes/GetAllTipoTransportesController";
 
 const createTransporteController = new CreateTransporteController();
 const getTransporteController = new GetTransporteController();
@@ -12,12 +13,14 @@ const getAllTransportesController = new GetAllTransportesController();
 const deleteTransporteController = new DeleteTransporteController();
 const updateTransporteController = new UpdateTransporteController();
 const getAllTransportesPorUsuarioController = new GetAllTransportesPorUsuarioController();
+//const getAllTipoTransportesController = new GetAllTipoTransportesController();
 
 const transporteRoutes = Router();
 
 transporteRoutes.post("/", createTransporteController.handle); // Criação de transporte
 transporteRoutes.get("/", getAllTransportesController.handle); // Listagem de transportes
 transporteRoutes.get("/usuario/:id", getAllTransportesPorUsuarioController.handle); 
+//transporteRoutes.get("/transporte/:id", getAllTipoTransportesController.handle); busca de tipo Transporte TODO
 transporteRoutes.get("'/:id", getTransporteController.handle); // Busca de transporte
 transporteRoutes.delete("/:id/delete", deleteTransporteController.handle); // Exclusão de transporte
 transporteRoutes.put("/:id/update", updateTransporteController.handle); // Atualização de transporte

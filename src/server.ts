@@ -9,7 +9,7 @@ const app = express();
 const cors = require('cors');
 app.use(cors());
 const corsOptions = {
-  origin: '*', // Permitir todas as origens (isso pode ser ajustado para uma origem específica em produção)
+  origin: 'https://api-traveler-node.onrender.com', // Permitir todas as origens (isso pode ser ajustado para uma origem específica em produção) Coloquei o endereço do render para teste
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
