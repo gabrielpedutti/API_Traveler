@@ -1,0 +1,211 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model StatusViagem {
+  id            Int     @id @default(autoincrement())
+  descricao     String  @unique
+
+  viagens       Viagem[] @relation("ViagemStatus")
+
+  @@map("status_viagem")
+}
+
+model TipoDespesa {
+  id            Int     @id @default(autoincrement())
+  descricao     String  @unique
+
+  despesas      Despesa[] @relation("DespesaTipo")
+
+  @@map("tipo_despesa")
+}
+
+model TipoTransporte {
+  id             Int     @id @default(autoincrement())
+  descricao      String  @unique
+
+  transportes    Transporte[] @relation("TransporteTipo")
+
+  @@map("tipo_transporte")
+}
+
+model TipoHospedagem {
+  id              Int     @id @default(autoincrement())
+  descricao       String  @unique
+
+  hospedagens     Hospedagem[] @relation("HospedagemTipo")
+
+  @@map("tipo_hospedagem")
+}
+
+model TipoPasseio {
+  id            Int     @id @default(autoincrement())
+  descricao     String  @unique
+
+  passeios      Passeio[] @relation("PasseioTipo")
+
+  @@map("tipo_passeio")
+}
+
+model Usuario {
+  id                 Int          @id @default(autoincrement())
+  nome               String
+  data_nascimento    DateTime
+  email              String       @unique
+  senha              String
+  municipio_id       Int
+  municipio          Municipio     @relation("UsuarioMunicipio", fields: [municipio_id], references: [id])
+
+  created_at         DateTime      @default(now())
+  updated_at         DateTime      @updatedAt
+
+  despesas           Despesa[]     @relation("UsuarioDespesas")
+  viagens            Viagem[]      @relation("UsuarioViagens")
+
+  @@map("usuarios")
+}
+
+model Despesa {
+  id            Int           @id @default(autoincrement())
+  descricao     String
+  valor         Float
+  data          DateTime
+  usuario_id    Int
+  usuario       Usuario       @relation("UsuarioDespesas", fields: [usuario_id], references: [id])
+  viagem_id     Int
+  viagem        Viagem        @relation("ViagemDespesas", fields: [viagem_id], references: [id])
+  tipo_despesa_id Int
+  tipo_despesa  TipoDespesa   @relation("DespesaTipo", fields: [tipo_despesa_id], references: [id])
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+
+  passeios      Passeio[]     @relation("DespesaPasseios")
+  hospedagens   Hospedagem[]  @relation("DespesaHospedagens")
+  transportes   Transporte[]  @relation("DespesaTransportes")
+
+  @@map("despesas")
+}
+
+model Hospedagem {
+  id            Int           @id @default(autoincrement())
+  nome          String
+  tipo_id       Int
+  tipo_hospedagem TipoHospedagem @relation("HospedagemTipo", fields: [tipo_id], references: [id])
+  data_checkin  DateTime
+  data_checkout DateTime
+  despesa_id    Int
+  despesa       Despesa       @relation("DespesaHospedagens", fields: [despesa_id], references: [id])
+  viagem_id     Int
+  viagem        Viagem        @relation("ViagemHospedagens", fields: [viagem_id], references: [id])
+  municipio_id  Int
+  municipio     Municipio     @relation("HospedagemMunicipio", fields: [municipio_id], references: [id])
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+
+  @@map("hospedagens")
+}
+
+model Passeio {
+  id            Int           @id @default(autoincrement())
+  nome          String
+  tipo_id       Int
+  tipo_passeio  TipoPasseio   @relation("PasseioTipo", fields: [tipo_id], references: [id])
+  data          DateTime
+  despesa_id    Int
+  despesa       Despesa       @relation("DespesaPasseios", fields: [despesa_id], references: [id])
+  viagem_id     Int
+  viagem        Viagem        @relation("ViagemPasseios", fields: [viagem_id], references: [id])
+  municipio_id  Int
+  municipio     Municipio     @relation("PasseioMunicipio", fields: [municipio_id], references: [id])
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+
+  @@map("passeios")
+}
+
+model Transporte {
+  id                      Int           @id @default(autoincrement())
+  nome                    String
+  tipo_id                 Int
+  tipo_transporte         TipoTransporte @relation("TransporteTipo", fields: [tipo_id], references: [id])
+  data                    DateTime
+  despesa_id              Int
+  despesa                 Despesa       @relation("DespesaTransportes", fields: [despesa_id], references: [id])
+  viagem_id               Int
+  viagem                  Viagem        @relation("ViagemTransportes", fields: [viagem_id], references: [id])
+  transporte_origem_id    Int
+  transporte_origem       Municipio     @relation("TransporteOrigem", fields: [transporte_origem_id], references: [id])
+  transporte_destino_id   Int
+  transporte_destino      Municipio     @relation("TransporteDestino", fields: [transporte_destino_id], references: [id])
+  created_at              DateTime      @default(now())
+  updated_at              DateTime      @updatedAt
+
+  @@map("transportes")
+}
+
+model Viagem {
+  id                  Int @id @default(autoincrement())
+  nome                String
+  descricao           String
+  viagem_destino_id   Int
+  viagem_destino      Municipio     @relation("ViagemDestino", fields: [viagem_destino_id], references: [id])
+  data_inicio         DateTime
+  data_fim            DateTime
+  usuario_id          Int
+  usuario             Usuario   @relation("UsuarioViagens", fields: [usuario_id], references: [id])
+  status_viagem_id    Int
+  status_viagem       StatusViagem @relation("ViagemStatus", fields: [status_viagem_id], references: [id])
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+
+  passeios    Passeio[]    @relation("ViagemPasseios")
+  hospedagens Hospedagem[] @relation("ViagemHospedagens")
+  transportes Transporte[] @relation("ViagemTransportes")
+  despesas    Despesa[]    @relation("ViagemDespesas")
+
+  @@map("viagens")
+}
+
+model Pais {
+  id            Int       @id @default(autoincrement())
+  nm_pais       String    
+  nm_pais_ascii String?   
+  
+  estados   Estado[]  @relation("PaisEstados")
+  @@map("paises")
+}
+
+model Estado {
+  id              Int         @id @default(autoincrement())
+  nm_estado       String
+  nm_estado_ascii String?
+  pais_id         Int      
+
+  pais            Pais        @relation("PaisEstados", fields: [pais_id], references: [id])
+  municipios      Municipio[] @relation("EstadoMunicipios")
+  @@map("estados")
+}
+
+model Municipio {
+  id                  Int     @id @default(autoincrement())
+  nm_municipio        String
+  nm_municipio_ascii  String?
+  latitude            Float
+  longitude           Float
+  estado_id           Int       
+  
+  estado    Estado    @relation("EstadoMunicipios", fields: [estado_id], references: [id])
+  usuarios  Usuario[] @relation("UsuarioMunicipio")
+  hospedagens Hospedagem[] @relation("HospedagemMunicipio")
+  passeios   Passeio[] @relation("PasseioMunicipio")
+  transporte_origem Transporte[] @relation("TransporteOrigem")
+  transporte_destino Transporte[] @relation("TransporteDestino")
+  viagem_destino    Viagem[] @relation("ViagemDestino")
+  @@map("municipios")
+} 
