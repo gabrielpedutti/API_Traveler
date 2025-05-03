@@ -37,6 +37,7 @@ export class CreateHospedagemUseCase {
           data: data.data_checkin,
           viagem_id: data.viagem_id,
           tipo_despesa_id: 3,
+          usuario_id: viagemExiste.usuario_id,
         },
       });
 
@@ -46,11 +47,11 @@ export class CreateHospedagemUseCase {
           tipo_id: data.tipo_id,
           data_checkin: data.data_checkin,
           data_checkout: data.data_checkout,
-          valor: data.valor,
           despesa_id: novaDespesa.id,
           viagem_id: data.viagem_id,
           endereco: data.endereco,
           documento_anexo: data.documento_anexo,
+          usuario_id: viagemExiste.usuario_id,
           created_at: new Date(),
         },
       });

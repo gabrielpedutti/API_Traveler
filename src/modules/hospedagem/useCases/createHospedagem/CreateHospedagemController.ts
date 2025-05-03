@@ -3,7 +3,7 @@ import { CreateHospedagemUseCase } from "./CreateHospedagemUseCase";
 
 export class CreateHospedagemController {
   async handle(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-    const { nome, tipo_id,data_checkin, data_checkout, viagem_id, valor, endereco, documento_anexo } = req.body;
+    const { nome, tipo_id, data_checkin, data_checkout, viagem_id, valor, endereco, documento_anexo } = req.body;
 
     const createHospedagemUseCase = new CreateHospedagemUseCase();
 

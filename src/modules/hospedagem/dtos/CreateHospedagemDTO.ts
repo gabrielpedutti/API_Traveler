@@ -3,7 +3,7 @@ export interface CreateHospedagemDTO {
     tipo_id: number; 
     data_checkin: Date;
     data_checkout: Date;
-    despesa_id: number;
+    // despesa_id: number;
     viagem_id: number;
     endereco: string;
     documento_anexo: string;
