@@ -19,6 +19,12 @@ export class DeleteHospedagemUseCase {
         where: { id: data.id },
       });
 
+      const { despesa_id } = hospedagem;
+
+      await prisma.despesa.delete({
+        where: { id: despesa_id },
+      });
+
       return hospedagemDeletado;
     } catch (error) {
       throw new Error("Erro ao deletar a hospedagem: " + error);

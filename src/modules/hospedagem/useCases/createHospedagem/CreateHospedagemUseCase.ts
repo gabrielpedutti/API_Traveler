@@ -9,28 +9,48 @@ export class CreateHospedagemUseCase {
     const viagemExiste = await prisma.viagem.findUnique({
       where: { id: data.viagem_id },
     });
+    const tipoExiste = await prisma.tipoHospedagem.findUnique({
+      where: { id: data.tipo_id },
+    });
+
+    const tipoDespesaExiste = await prisma.tipoDespesa.findUnique({
+      where: { id: 3 },
+    });
 
     if (!viagemExiste) {
       throw new AppError("Viagem não encontrada.");
     }
 
-    const municipioExiste = await prisma.municipio.findUnique({
-      where: { id: data.municipio_id },
-    });
-
-    if (!municipioExiste) {
-      throw new AppError("Município não encontrado.");
+    if (!tipoExiste) {
+      throw new AppError("Tipo não encontrado.");
     }
+    
+    if (!tipoDespesaExiste) {
+      throw new AppError("Tipo de despesa 'hospedagem' não encontrado.");
+    }
+
     try {
+      const novaDespesa = await prisma.despesa.create({
+        data: {
+          descricao: data.nome,
+          valor: data.valor,
+          data: data.data_checkin,
+          viagem_id: data.viagem_id,
+          tipo_despesa_id: 3,
+        },
+      });
+
       const novaHospedagem = await prisma.hospedagem.create({
         data: {
           nome: data.nome,
           tipo_id: data.tipo_id,
           data_checkin: data.data_checkin,
           data_checkout: data.data_checkout,
-          despesa_id: data.despesa_id,
+          valor: data.valor,
+          despesa_id: novaDespesa.id,
           viagem_id: data.viagem_id,
-          municipio_id: data.municipio_id,
+          endereco: data.endereco,
+          documento_anexo: data.documento_anexo,
           created_at: new Date(),
         },
       });

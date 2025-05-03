@@ -3,7 +3,7 @@ import { CreateHospedagemUseCase } from "./CreateHospedagemUseCase";
 
 export class CreateHospedagemController {
   async handle(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-    const { nome, tipo_id, data_checkin, data_checkout, despesa_id, viagem_id, municipio_id } = req.body;
+    const { nome, tipo_id,data_checkin, data_checkout, viagem_id, valor, endereco, documento_anexo } = req.body;
 
     const createHospedagemUseCase = new CreateHospedagemUseCase();
 
@@ -13,9 +13,10 @@ export class CreateHospedagemController {
         tipo_id,
         data_checkin,
         data_checkout,
-        despesa_id,
+        valor,
         viagem_id,
-        municipio_id
+        endereco,
+        documento_anexo
       });
 
       return res.status(201).json(novaHospedagem);

@@ -13,7 +13,7 @@ export class DeleteViagemController {
       });
 
       return res.status(200).json({
-        message: "Viagem deletado com sucesso.",
+        message: "Viagem deletada com sucesso.",
         viagem: viagemDeletado,
       });
     } catch (error) {

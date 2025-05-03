@@ -5,6 +5,7 @@ export interface CreateHospedagemDTO {
     data_checkout: Date;
     despesa_id: number;
     viagem_id: number;
-    municipio_id: number;
-  }
-  
+    endereco: string;
+    documento_anexo: string;
+    valor: number;
+  }  
