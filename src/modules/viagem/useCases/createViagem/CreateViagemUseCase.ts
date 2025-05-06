@@ -14,7 +14,6 @@ export class CreateViagemUseCase {
       const novaViagem = await prisma.viagem.create({
         data: {
             nome: data.nome,
-            descricao: data.descricao!,
             data_inicio: data.data_inicio!,
             data_fim: data.data_fim!,
             usuario_id: data.usuario_id,

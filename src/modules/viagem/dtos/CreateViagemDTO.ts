@@ -1,6 +1,5 @@
 export interface CreateViagemDTO{
     nome: string;
-    descricao?: string;
     data_inicio?: Date;
     data_fim?: Date;
     usuario_id: number;
