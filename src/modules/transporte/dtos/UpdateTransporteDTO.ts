@@ -1,11 +1,12 @@
 export interface UpdateTransporteDTO {
-    id: number;
-    nome?: string;
-    tipo_id?: number;
-    data?: Date;
-    despesa_id?: number | null;
-    viagem_id?: number | null;
-    transporte_origem_id?: number | null;
-    transporte_destino_id?: number | null;
+  id: number;
+  nome: string;
+  tipo_id: number;
+  data: Date;
+  viagem_id: number;
+  despesa_id: number;
+  transporte_destino_id: number;
+  documento_anexo: string;
+  valor: number;
   }
   

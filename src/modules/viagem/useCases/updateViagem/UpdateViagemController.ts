@@ -6,7 +6,6 @@ export class UpdateViagemController {
     const { id } = req.params;
     const {
       nome,
-      descricao,
       viagem_destino_id,
       data_inicio,
       data_fim,
@@ -20,7 +19,6 @@ export class UpdateViagemController {
       const result = await updateViagemUseCase.execute({
         id: Number(id),
         nome,
-        descricao,
         viagem_destino_id,
         data_inicio: data_inicio ? new Date(data_inicio) : undefined,
         data_fim: data_fim ? new Date(data_fim) : undefined,

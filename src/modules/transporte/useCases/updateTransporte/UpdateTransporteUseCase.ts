@@ -5,33 +5,88 @@ import { AppError } from "../../../../errors/AppError";
 
 export class UpdateTransporteUseCase {
   async execute(data: UpdateTransporteDTO): Promise<Transporte> {
-    const updateData: any = {};
+    const viagemExiste = await prisma.viagem.findUnique({
+      where: { id: data.viagem_id },
+    });
 
-    // Adiciona os campos a serem atualizados se fornecidos
-    if (data.nome) updateData.nome = data.nome;
-    if (data.tipo_id) updateData.tipo_id = data.tipo_id;
-    if (data.despesa_id) updateData.despesa_id = data.despesa_id;
-    if (data.viagem_id) updateData.viagem_id = data.viagem_id;
-    if (data.transporte_origem_id) updateData.transporte_origem_id = data.transporte_origem_id;
-    if (data.transporte_destino_id) updateData.transporte_destino_id = data.transporte_destino_id;
-    if (data.data) updateData.data = data.data;
+    const tipoExiste = await prisma.tipoTransporte.findUnique({
+      where: { id: data.tipo_id },
+    });
+
+    const tipoDespesaExiste = await prisma.tipoDespesa.findUnique({
+      where: { id: 2 },
+    });
+
+    if (!viagemExiste) {
+      throw new AppError("Viagem não encontrada.");
+    }
+
+    if (!tipoExiste) {
+      throw new AppError("Tipo não encontrado.");
+    }
+    
+    if (!tipoDespesaExiste) {
+      throw new AppError("Tipo de despesa 'transporte' não encontrado.");
+    }
+
+    const destinoExiste = await prisma.municipio.findUnique({
+      where: { id: data.transporte_destino_id },
+    });
+
+    if (!destinoExiste) {
+      throw new AppError("Município de destino não encontrado.");
+    }
+
 
     try {
-      // Verifica se pelo menos um campo foi fornecido para atualização
-      const hasOptionalField = Object.keys(updateData).length > 0;
-      if (!data.id || !hasOptionalField) {
-        throw new AppError("Pelo menos um campo deve ser preenchido para atualizar os dados do transporte.");
-      }
-
-      // Atualiza o transporte no banco de dados
-      const transporte = await prisma.transporte.update({
+      const transporteExistente = await prisma.transporte.findUnique({
         where: { id: data.id },
-        data: updateData,
       });
 
-      return transporte;
-    } catch (error) {
-      throw new AppError("Erro ao atualizar o transporte: " + error);
-    }
+      if (!transporteExistente) {
+        throw new AppError("Transporte não encontrado.");
+      }  
+      
+    await prisma.despesa.update({
+      where: { id: data.despesa_id },
+      data: {
+        descricao: data.nome,
+        data: data.data,
+        valor: data.valor,
+        updated_at: new Date(),
+      },
+    });
+        
+    const transporteAtualizado = await prisma.transporte.update({
+
+      where: { id: data.id },
+      data: {
+        nome: data.nome,
+        tipo_transporte: {
+          connect: { id: data.tipo_id },
+        },
+        data:data.data,
+        viagem: {
+          connect: { id: data.viagem_id },
+        },
+        transporte_destino: {
+          connect: { id: data.transporte_destino_id },
+        },
+        documento_anexo: data.documento_anexo,
+        updated_at: new Date(),
+      },
+      include: {
+        despesa: {
+          select: {
+            valor: true,
+          },
+        },
+      },
+    });
+
+        return transporteAtualizado;
+      } catch (error) {
+        throw new Error("Erro ao atualizar o transporte: " + error);
+      }
   }
 }

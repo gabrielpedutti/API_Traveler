@@ -7,11 +7,12 @@ export class UpdateTransporteController {
     const {
       nome,
       tipo_id,
-      despesa_id,
-      viagem_id,
-      transporte_origem_id,
-      transporte_destino_id,
       data,
+      viagem_id,
+      despesa_id,
+      transporte_destino_id,
+      documento_anexo,
+      valor
     } = req.body;
 
     const updateTransporteUseCase = new UpdateTransporteUseCase();
@@ -21,11 +22,12 @@ export class UpdateTransporteController {
         id: Number(id),
         nome,
         tipo_id,
-        despesa_id,
-        viagem_id,
-        transporte_origem_id,
-        transporte_destino_id,
         data,
+        viagem_id,
+        despesa_id,
+        transporte_destino_id,
+        documento_anexo,
+        valor,
       });
 
       return res.status(200).json(result); // Status 200 para sucesso

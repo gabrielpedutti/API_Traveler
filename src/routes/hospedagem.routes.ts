@@ -5,6 +5,7 @@ import { DeleteHospedagemController } from "../modules/hospedagem/useCases/delet
 import { UpdateHospedagemController } from "../modules/hospedagem/useCases/updateHospedagem/UpdateHospedagemController";
 import { GetHospedagemController } from "../modules/hospedagem/useCases/getHospedagem/GetHospedagemController";
 import { GetAllHospedagensPorUsuarioController } from "../modules/hospedagem/useCases/getAllHospedagensPorUsuario/GetAllHospedagensPorUsuarioController";
+import { GetAllHospedagensPorViagemController } from "../modules/hospedagem/useCases/getAllHospedagensPorViagem/GetAllHospedagensPorViagemController";
 
 const createHospedagemController = new CreateHospedagemController();
 const getHospedagemController = new GetHospedagemController();
@@ -12,6 +13,7 @@ const getAllHospedagensController = new GetAllHospedagensController();
 const deleteHospedagemController = new DeleteHospedagemController();
 const updateHospedagemController = new UpdateHospedagemController();
 const getAllHospedagensPorUsuarioController = new GetAllHospedagensPorUsuarioController();
+const getAllHospedagensPorViagemController = new GetAllHospedagensPorViagemController();
 
 const hospedagemRoutes = Router();
 
@@ -19,6 +21,7 @@ hospedagemRoutes.post("/", createHospedagemController.handle); // Criação de h
 hospedagemRoutes.get("/", getAllHospedagensController.handle); // Listagem de hospedagem
 hospedagemRoutes.get("'/:id", getHospedagemController.handle); // Busca de hospedagem
 hospedagemRoutes.get("/usuario/:id", getAllHospedagensPorUsuarioController.handle);
+hospedagemRoutes.get("/viagem/:id", getAllHospedagensPorViagemController.handle);
 hospedagemRoutes.delete("/:id/delete", deleteHospedagemController.handle); // Exclusão de hospedagem
 hospedagemRoutes.put("/:id/update", updateHospedagemController.handle); // Atualização de hospedagem
 

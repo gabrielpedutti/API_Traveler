@@ -7,13 +7,14 @@ export class UpdateHospedagemController {
     const {
       nome,
       tipo_id,
-      tipo_hospedagem_id,
-      despesa_id,
-      viagem_id,
-      municipio_id,
-      transporte_destino_id,
       data_checkin,
-      data_checkout
+      data_checkout,
+      viagem_id,
+      endereco,
+      documento_anexo,
+      usuario_id,
+      despesa_id,
+      valor,
     } = req.body;
 
 
@@ -24,12 +25,14 @@ export class UpdateHospedagemController {
         id: Number(id),
         nome,
         tipo_id,
-        tipo_hospedagem_id,
-        despesa_id,
-        viagem_id,
-        municipio_id,
         data_checkin,
-        data_checkout
+        data_checkout,
+        viagem_id,
+        endereco,
+        documento_anexo,
+        usuario_id,
+        despesa_id,
+        valor,
       });
 
       return res.status(200).json(result); // Status 200 para sucesso
