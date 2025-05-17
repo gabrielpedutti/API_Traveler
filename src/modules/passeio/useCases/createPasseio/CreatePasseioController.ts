@@ -3,7 +3,7 @@ import { CreatePasseioUseCase } from "./CreatePasseioUseCase";
 
 export class CreatePasseioController {
   async handle(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-    const { nome, tipo_id, data, despesa_id, viagem_id, municipio_id } = req.body;
+    const { nome, tipo_id, data, documento_anexo, viagem_id, valor } = req.body;
 
     const createPasseioUseCase = new CreatePasseioUseCase();
 
@@ -12,9 +12,9 @@ export class CreatePasseioController {
         nome,
         tipo_id,
         data,
-        despesa_id,
-        viagem_id,
-        municipio_id,
+        viagem_id, 
+        documento_anexo,
+        valor
       });
 
       return res.status(201).json(novoPasseio);

@@ -5,40 +5,45 @@ import { AppError } from "../../../../errors/AppError";
 
 export class CreatePasseioUseCase {
   async execute(data: CreatePasseioDTO): Promise<Passeio> {
-    // Validações específicas (ex.: checar se IDs relacionados existem)
-    const viagemExiste = await prisma.viagem.findUnique({
-      where: { id: data.viagem_id },
-    });
+    const viagem = await prisma.viagem.findUnique({ where: { id: data.viagem_id } });
+    if (!viagem) throw new AppError("Viagem não encontrada.");
 
-    if (!viagemExiste) {
-      throw new AppError("Viagem não encontrada.");
-    }
+    const tipo = await prisma.tipoPasseio.findUnique({ where: { id: data.tipo_id } });
+    if (!tipo) throw new AppError("Tipo de passeio não encontrado.");
 
-    const municipioExiste = await prisma.municipio.findUnique({
-      where: { id: data.municipio_id },
-    });
-
-    if (!municipioExiste) {
-      throw new AppError("Município não encontrado.");
-    }
-
+    const tipoDespesa = await prisma.tipoDespesa.findUnique({ where: { id: 4 } });
+    if (!tipoDespesa) throw new AppError("Tipo de despesa 'passeio' não encontrado.");
 
     try {
+      const novaDespesa = await prisma.despesa.create({
+        data: {
+          descricao: data.nome,
+          valor: data.valor,
+          data: data.data,
+          viagem_id: data.viagem_id,
+          tipo_despesa_id: 4,
+          usuario_id: viagem.usuario_id,
+        },
+      });
+
       const novoPasseio = await prisma.passeio.create({
         data: {
           nome: data.nome,
-          tipo_id: data.tipo_id,
+          tipo_passeio: {
+            connect: { id: data.tipo_id },
+          },
           data: data.data,
-          despesa_id: data.despesa_id,
+          despesa_id: novaDespesa.id,
           viagem_id: data.viagem_id,
-          municipio_id: data.municipio_id,
+          documento_anexo: data.documento_anexo,
+          usuario_id: viagem.usuario_id,
           created_at: new Date(),
         },
       });
 
       return novoPasseio;
     } catch (error) {
-      throw new Error("Erro ao criar o passeio: " + error);
+      throw new AppError("Erro ao criar passeio: " + error);
     }
   }
 }
