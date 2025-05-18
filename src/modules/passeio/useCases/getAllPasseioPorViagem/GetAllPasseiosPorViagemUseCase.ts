@@ -7,9 +7,16 @@ export class GetAllPasseiosPorViagemUseCase {
     const passeios = await prisma.passeio.findMany({
       where: {
         viagem: {
-          usuario_id: data.id,
+          id: data.id,
         },
-      }
+      },
+      include: {
+        tipo_passeio: {
+          select: {
+            descricao: true,
+          },
+        },
+      },
     });
     
     return passeios;

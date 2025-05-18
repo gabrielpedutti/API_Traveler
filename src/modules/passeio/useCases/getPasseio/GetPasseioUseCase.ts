@@ -12,7 +12,14 @@ export class GetPasseioUseCase {
       const passeio = await prisma.passeio.findFirstOrThrow({
         where: {
           id: data.id
-        }
+        },
+        include: {
+        tipo_passeio: {
+          select: {
+            descricao: true,
+          },
+        },
+      },
       });
       
       return passeio;

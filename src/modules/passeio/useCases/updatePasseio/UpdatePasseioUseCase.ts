@@ -4,31 +4,63 @@ import { UpdatePasseioDTO } from "../../dtos/UpdatePasseioDTO";
 import { AppError } from "../../../../errors/AppError";
 
 export class UpdatePasseioUseCase {
-  async execute(data: UpdatePasseioDTO): Promise<Passeio> {
-    const updateData: any = {};
+  async execute(data: UpdatePasseioDTO): Promise<Passeio> {    
+    const passeioExistente = await prisma.passeio.findUnique({
+      where: { id: data.id },
+    });
+    if (!passeioExistente) {
+      throw new AppError("Passeio não encontrado.");
+    }
 
-    // Adiciona os campos a serem atualizados se fornecidos
-    if (data.nome) updateData.nome = data.nome;
-    if (data.tipo_id) updateData.tipo_id = data.tipo_id;
-    if (data.despesa_id) updateData.despesa_id = data.despesa_id;
-    if (data.viagem_id) updateData.viagem_id = data.viagem_id;
-    if (data.municipio_id) updateData.municipio_id = data.municipio_id;   
-    if (data.data) updateData.data = data.data;
+    const viagem = await prisma.viagem.findUnique({ where: { id: data.viagem_id } });
+    if (!viagem) throw new AppError("Viagem não encontrada.");
+
+    const tipo = await prisma.tipoPasseio.findUnique({ where: { id: data.tipo_id } });
+    if (!tipo) throw new AppError("Tipo de passeio não encontrado.");
 
     try {
-      // Verifica se pelo menos um campo foi fornecido para atualização
-      const hasOptionalField = Object.keys(updateData).length > 0;
-      if (!data.id || !hasOptionalField) {
-        throw new AppError("Pelo menos um campo deve ser preenchido para atualizar os dados do passeio.");
-      }
-
-      // Atualiza o passeio no banco de dados
-      const passeio = await prisma.passeio.update({
+      await prisma.despesa.update({
+        where: { id: data.despesa_id },
+        data: {
+          descricao: data.nome,
+          valor: data.valor,
+          data: data.data,
+          updated_at: new Date(),
+        },
+      });
+      
+      const passeioAtualizado = await prisma.passeio.update({
         where: { id: data.id },
-        data: updateData,
+        data: {
+          nome: data.nome,
+          tipo_passeio: {
+            connect: { id: data.tipo_id },
+          },
+          data: data.data,
+          viagem: {
+            connect: { id: data.viagem_id },
+          },
+          documento_anexo: data.documento_anexo,
+          usuario: {
+            connect: { id: viagem.usuario_id },
+          },
+          updated_at: new Date(),
+        },
+        include: {
+          despesa: {
+            select: {
+              valor: true,
+            },
+          },
+          tipo_passeio: {
+            select: {
+              descricao: true,
+            },
+          },
+        },
       });
 
-      return passeio;
+      return passeioAtualizado;
     } catch (error) {
       throw new AppError("Erro ao atualizar o passeio: " + error);
     }

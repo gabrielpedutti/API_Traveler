@@ -9,7 +9,14 @@ export class GetAllPasseiosPorUsuarioUseCase {
         viagem: {
           usuario_id: data.id, // Filtro pelo ID do usuário na tabela `viagem`
         },
-      }
+      },
+      include: {
+        tipo_passeio: {
+          select: {
+            descricao: true,
+          },
+        },
+      },
     });
     
     return passeios;

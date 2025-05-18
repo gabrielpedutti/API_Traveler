@@ -7,10 +7,11 @@ export class UpdatePasseioController {
     const {
       nome,
       tipo_id,
-      despesa_id,
-      viagem_id,
-      municipio_id,
       data,
+      viagem_id,
+      documento_anexo,
+      valor,
+      despesa_id,
     } = req.body;
 
     const updatePasseioUseCase = new UpdatePasseioUseCase();
@@ -20,15 +21,16 @@ export class UpdatePasseioController {
         id: Number(id),
         nome,
         tipo_id,
-        despesa_id,
+        data,
         viagem_id,
-        municipio_id,
-        data
+        documento_anexo,
+        valor,
+        despesa_id,
       });
 
-      return res.status(200).json(result); // Status 200 para sucesso
+      return res.status(200).json(result);
     } catch (error) {
-      next(error); // Encaminha o erro para o middleware de tratamento
+      next(error);
     }
   }
 }
