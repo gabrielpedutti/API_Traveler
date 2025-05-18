@@ -4,6 +4,6 @@ export interface CreateDespesaDTO {
     data: Date;
     usuario_id: number;
     viagem_id: number;
-    tipo_despesa_id: number;
+    tipo_id: number;
   }
   

@@ -3,7 +3,7 @@ import { CreateDespesaUseCase } from "./CreateDespesaUseCase";
 
 export class CreateDespesaController {
   async handle(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-    const { descricao, valor, data, usuario_id, viagem_id, tipo_despesa_id } = req.body;
+    const { descricao, valor, data, usuario_id, viagem_id, tipo_id } = req.body;
 
     const createDespesaUseCase = new CreateDespesaUseCase();
 
@@ -14,7 +14,7 @@ export class CreateDespesaController {
         data,
         usuario_id,
         viagem_id,
-        tipo_despesa_id,
+        tipo_id,
       });
 
       return res.status(201).json(despesa);

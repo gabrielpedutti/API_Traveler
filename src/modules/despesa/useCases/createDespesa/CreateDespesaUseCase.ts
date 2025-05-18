@@ -13,12 +13,16 @@ export class CreateDespesaUseCase {
       throw new AppError("Usuário não encontrado.");
     }
 
-    const viagemExiste = await prisma.viagem.findUnique({
+    const viagem = await prisma.viagem.findUnique({
       where: { id: data.viagem_id },
     });
 
-    if (!viagemExiste) {
+    if (!viagem) {
       throw new AppError("Viagem não encontrada.");
+    }
+
+    if (!data.tipo_id) {
+      throw new AppError("Campo tipo_id é obrigatório.");
     }
 
     try {
@@ -27,9 +31,15 @@ export class CreateDespesaUseCase {
           descricao: data.descricao,
           valor: data.valor,
           data: data.data,
-          usuario_id: data.usuario_id,
-          viagem_id: data.viagem_id,
-          tipo_despesa_id: data.tipo_despesa_id,
+          usuario: {
+              connect: { id: viagem.usuario_id },
+            },
+          viagem: {
+              connect: { id: data.viagem_id },
+            },
+          tipo_despesa: {
+              connect: { id: data.tipo_id },
+            },
         },
       });
 
