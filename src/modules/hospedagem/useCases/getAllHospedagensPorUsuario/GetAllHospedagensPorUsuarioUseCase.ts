@@ -9,12 +9,17 @@ export class GetAllHospedagensPorUsuarioUseCase {
         usuario_id: data.id,
         },
         include: {
-            despesa: {
-              select: {
-                valor: true,
-              },
-            },
+        tipo_hospedagem: {
+          select: {
+            descricao: true,
+          },
         },
+        despesa: {
+          select: {
+            valor: true
+          }
+        }
+      },
     });
     
     return hospedagens;

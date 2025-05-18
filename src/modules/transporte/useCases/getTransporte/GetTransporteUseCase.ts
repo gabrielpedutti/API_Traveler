@@ -12,7 +12,19 @@ export class GetTransporteUseCase {
       const transporte = await prisma.transporte.findFirstOrThrow({
         where: {
           id: data.id
+        },
+        include: {
+        tipo_transporte: {
+          select: {
+            descricao: true,
+          },
+        },
+        despesa: {
+          select: {
+            valor: true
+          }
         }
+      },
       });
       
       return transporte;

@@ -12,7 +12,19 @@ export class GetHospedagemUseCase {
       const hospedagem = await prisma.hospedagem.findFirstOrThrow({
         where: {
           id: data.id
+        },
+        include: {
+        tipo_hospedagem: {
+          select: {
+            descricao: true,
+          },
+        },
+        despesa: {
+          select: {
+            valor: true
+          }
         }
+      },
       });
       
       return hospedagem;

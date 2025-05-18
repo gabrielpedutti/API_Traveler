@@ -5,8 +5,15 @@ import { AppError } from "../../../../errors/AppError";
 export class GetDespesaUseCase {
   async execute(id: number): Promise<Despesa> {
     try {
-      const despesa = await prisma.despesa.findUnique({
+      const despesa = await prisma.despesa.findFirstOrThrow({
         where: { id },
+        include: {
+        tipo_despesa: {
+          select: {
+            descricao: true,
+          },
+        },
+      },
       });
 
       if (!despesa) {

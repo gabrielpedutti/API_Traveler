@@ -16,6 +16,11 @@ export class GetAllPasseiosPorViagemUseCase {
             descricao: true,
           },
         },
+        despesa: {
+          select: {
+            valor: true
+          }
+        }
       },
     });
     

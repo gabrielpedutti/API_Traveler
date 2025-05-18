@@ -3,6 +3,7 @@ import { prisma } from "../../../../prisma/client";
 import { GetPasseioDTO } from "../../dtos/GetPasseioDTO";
 import { AppError } from "../../../../errors/AppError";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+//Todo melhorar tratamento de erros
 
 export class GetPasseioUseCase {
   async execute(data: GetPasseioDTO): Promise<Passeio> {
@@ -19,6 +20,11 @@ export class GetPasseioUseCase {
             descricao: true,
           },
         },
+        despesa: {
+          select: {
+            valor: true
+          }
+        }
       },
       });
       

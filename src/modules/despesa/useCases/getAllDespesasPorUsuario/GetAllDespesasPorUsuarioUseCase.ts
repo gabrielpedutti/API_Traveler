@@ -9,7 +9,14 @@ export class GetAllDespesasPorUsuarioUseCase {
         viagem: {
           usuario_id: data.id, // Filtro pelo ID do usuário na tabela `viagem`
         },
-      }
+      },
+      include: {
+        tipo_despesa: {
+          select: {
+            descricao: true,
+          },
+        },
+      },
     });
     
     return despesas;

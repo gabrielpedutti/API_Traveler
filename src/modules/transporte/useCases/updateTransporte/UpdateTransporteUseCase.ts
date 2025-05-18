@@ -76,11 +76,16 @@ export class UpdateTransporteUseCase {
         updated_at: new Date(),
       },
       include: {
-        despesa: {
+        tipo_transporte: {
           select: {
-            valor: true,
+            descricao: true,
           },
         },
+        despesa: {
+          select: {
+            valor: true
+          }
+        }
       },
     });
 

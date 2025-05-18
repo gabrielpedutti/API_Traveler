@@ -42,11 +42,16 @@ export class UpdateHospedagemUseCase {
         updated_at: new Date(),
       },
       include: {
-        despesa: {
+        tipo_hospedagem: {
           select: {
-            valor: true,
+            descricao: true,
           },
         },
+        despesa: {
+          select: {
+            valor: true
+          }
+        }
       },
     });
 

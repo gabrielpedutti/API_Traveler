@@ -9,7 +9,19 @@ export class GetAllTransportesPorUsuarioUseCase {
         viagem: {
           usuario_id: data.id, // Filtro pelo ID do usuário na tabela `viagem`
         },
-      }
+      },
+      include: {
+        tipo_transporte: {
+          select: {
+            descricao: true,
+          },
+        },
+        despesa: {
+          select: {
+            valor: true
+          }
+        }
+      },
     });
 
     return transportes;
