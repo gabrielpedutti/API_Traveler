@@ -33,10 +33,16 @@ export class CreatePasseioUseCase {
             connect: { id: data.tipo_id },
           },
           data: data.data,
-          despesa_id: novaDespesa.id,
-          viagem_id: data.viagem_id,
+          despesa: {
+            connect: { id: novaDespesa.id },
+          },
+          viagem: {
+            connect: { id: data.viagem_id },
+          },
           documento_anexo: data.documento_anexo,
-          usuario_id: viagem.usuario_id,
+          usuario: {
+            connect: { id: viagem.usuario_id },
+          },
           created_at: new Date(),
         },
       });
