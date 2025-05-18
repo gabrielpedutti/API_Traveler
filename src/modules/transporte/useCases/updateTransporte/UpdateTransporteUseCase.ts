@@ -46,35 +46,42 @@ export class UpdateTransporteUseCase {
       if (!transporteExistente) {
         throw new AppError("Transporte não encontrado.");
       }  
+
+    const updateDespesaData: any = {};
+      if (data.nome) updateDespesaData.descricao = data.nome;
+      if (data.valor !== undefined) updateDespesaData.valor = data.valor;
+      if (data.data) updateDespesaData.data = data.data;
+      updateDespesaData.updated_at = new Date();
       
     await prisma.despesa.update({
       where: { id: data.despesa_id },
-      data: {
-        descricao: data.nome,
-        data: data.data,
-        valor: data.valor,
-        updated_at: new Date(),
-      },
+      data: updateDespesaData,
     });
-        
-    const transporteAtualizado = await prisma.transporte.update({
 
-      where: { id: data.id },
-      data: {
-        nome: data.nome,
-        tipo_transporte: {
+    const updateTransporteData: any = {};
+      if (data.nome) updateTransporteData.nome = data.nome;
+      if (data.tipo_id) {
+        updateTransporteData.tipo_transporte = {
           connect: { id: data.tipo_id },
-        },
-        data:data.data,
-        viagem: {
-          connect: { id: data.viagem_id },
-        },
-        transporte_destino: {
+        };
+      }
+      if (data.data) updateTransporteData.data = data.data;
+      updateTransporteData.viagem = {
+        connect: { id: data.viagem_id },
+      };
+      if (data.transporte_destino_id) {
+        updateTransporteData.transporte_destino = {
           connect: { id: data.transporte_destino_id },
-        },
-        documento_anexo: data.documento_anexo,
-        updated_at: new Date(),
-      },
+        };
+      }
+      if (data.documento_anexo) {
+        updateTransporteData.documento_anexo = data.documento_anexo;
+      }
+      updateTransporteData.updated_at = new Date()
+
+    const transporteAtualizado = await prisma.transporte.update({
+      where: { id: data.id },
+      data: updateTransporteData,
       include: {
         tipo_transporte: {
           select: {

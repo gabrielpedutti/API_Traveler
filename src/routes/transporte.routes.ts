@@ -6,7 +6,6 @@ import { UpdateTransporteController } from "../modules/transporte/useCases/updat
 import { GetTransporteController } from "../modules/transporte/useCases/getTransporte/GetTransporteController";
 import { GetAllTransportesPorUsuarioController } from "../modules/transporte/useCases/getAllTransportesPorUsuario/GetAllTransportesPorUsuarioController";
 import { GetAllTransportesPorViagemController } from "../modules/transporte/useCases/getAllTransportesPorViagem/GetAllTransportesPorViagemController";
-import { GetTipoTransporteController } from "../modules/transporte/useCases/getTipoTransporte/GetTipoTransporteController";
 
 const createTransporteController = new CreateTransporteController();
 const getTransporteController = new GetTransporteController();
@@ -15,7 +14,6 @@ const deleteTransporteController = new DeleteTransporteController();
 const updateTransporteController = new UpdateTransporteController();
 const getAllTransportesPorUsuarioController = new GetAllTransportesPorUsuarioController();
 const getAllTransportesPorViagemController = new GetAllTransportesPorViagemController();
-const getTipoTransporteController = new GetTipoTransporteController();
 
 const transporteRoutes = Router();
 
@@ -26,6 +24,5 @@ transporteRoutes.get("/viagem/:id", getAllTransportesPorViagemController.handle)
 transporteRoutes.get("'/:id", getTransporteController.handle); // Busca de transporte
 transporteRoutes.delete("/:id/delete", deleteTransporteController.handle); // Exclusão de transporte
 transporteRoutes.put("/:id/update", updateTransporteController.handle); // Atualização de transporte
-transporteRoutes.get("/tipos", getTipoTransporteController.handle); // Listagem de tipos de transporte
 
 export { transporteRoutes };

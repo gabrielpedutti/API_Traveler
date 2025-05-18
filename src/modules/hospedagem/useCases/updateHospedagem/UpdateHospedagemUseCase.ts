@@ -12,48 +12,56 @@ export class UpdateHospedagemUseCase {
 
       if (!hospedagemExistente) {
         throw new AppError("Hospedagem não encontrada.");
-      }  
-      
-    await prisma.despesa.update({
-      where: { id: data.despesa_id },
-      data: {
-        descricao: data.nome,
-        data: data.data_checkin,
-        valor: data.valor,
-        updated_at: new Date(),
-      },
-    });
-        
-    const hospedagemAtualizada = await prisma.hospedagem.update({
+      }
 
-      where: { id: data.id },
-      data: {
-        nome: data.nome,
-        tipo_hospedagem: {
+      // Atualiza a despesa associada
+      const updateDespesaData: any = {};
+      if (data.nome) updateDespesaData.descricao = data.nome;
+      if (data.valor !== undefined) updateDespesaData.valor = data.valor;
+      if (data.data_checkin) updateDespesaData.data = data.data_checkin;
+      updateDespesaData.updated_at = new Date();
+
+      await prisma.despesa.update({
+        where: { id: data.despesa_id },
+        data: updateDespesaData,
+      });
+
+      const updateHospedagemData: any = {};
+
+      if (data.nome) updateHospedagemData.nome = data.nome;
+      if (data.tipo_id) {
+        updateHospedagemData.tipo_hospedagem = {
           connect: { id: data.tipo_id },
-        },
-        data_checkin: data.data_checkin,
-        data_checkout: data.data_checkout,
-        viagem: {
-          connect: { id: data.viagem_id },
-        },
-        endereco: data.endereco,
-        documento_anexo: data.documento_anexo,
-        updated_at: new Date(),
-      },
-      include: {
-        tipo_hospedagem: {
-          select: {
-            descricao: true,
+        };
+      }
+      if (data.data_checkin) updateHospedagemData.data_checkin = data.data_checkin;
+      if (data.data_checkout) updateHospedagemData.data_checkout = data.data_checkout;
+
+      updateHospedagemData.viagem = {
+        connect: { id: data.viagem_id },
+      };
+
+      updateHospedagemData.usuario = {
+        connect: { id: data.usuario_id },
+      };
+
+      if (data.endereco) updateHospedagemData.endereco = data.endereco;
+      if (data.documento_anexo) updateHospedagemData.documento_anexo = data.documento_anexo;
+
+      updateHospedagemData.updated_at = new Date();
+
+      const hospedagemAtualizada = await prisma.hospedagem.update({
+        where: { id: data.id },
+        data: updateHospedagemData,
+        include: {
+          tipo_hospedagem: {
+            select: { descricao: true },
+          },
+          despesa: {
+            select: { valor: true },
           },
         },
-        despesa: {
-          select: {
-            valor: true
-          }
-        }
-      },
-    });
+      });
 
       return hospedagemAtualizada;
     } catch (error) {

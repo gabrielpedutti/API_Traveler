@@ -26,22 +26,21 @@ export class UpdateDespesaUseCase {
 
     if (!despesaExistente) {
       throw new AppError("Despesa não encontrada.");
-    } 
+    }
+
+    const updateData: any = {};
+
+    if (data.descricao) updateData.descricao = data.descricao;
+    if (data.valor) updateData.valor = data.valor;
+    if (data.data) updateData.data = data.data;
+    if (data.viagem_id) updateData.viagem = { connect: { id: data.viagem_id } };
+    if (data.tipo_id) updateData.tipo_despesa = { connect: { id: data.tipo_id } };
+    updateData.updated_at = new Date();
+
     const despesaAtualizada = await prisma.despesa.update({
 
     where: { id: data.id },
-    data: {
-      descricao: data.descricao,
-      tipo_despesa: {
-        connect: { id: data.tipo_id },
-      },
-      data:data.data,
-      valor:data.valor,
-      viagem: {
-        connect: { id: data.viagem_id },
-      },
-      updated_at: new Date(),
-    },
+    data: updateData,
     include: {
       tipo_despesa: {
         select: {

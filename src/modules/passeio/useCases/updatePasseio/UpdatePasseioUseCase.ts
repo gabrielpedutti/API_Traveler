@@ -19,33 +19,39 @@ export class UpdatePasseioUseCase {
     if (!tipo) throw new AppError("Tipo de passeio não encontrado.");
 
     try {
+      const updateDespesaData: any = {};
+      if (data.nome) updateDespesaData.descricao = data.nome;
+      if (data.valor !== undefined) updateDespesaData.valor = data.valor;
+      if (data.data) updateDespesaData.data = data.data;
+      updateDespesaData.updated_at = new Date();
+
       await prisma.despesa.update({
         where: { id: data.despesa_id },
-        data: {
-          descricao: data.nome,
-          valor: data.valor,
-          data: data.data,
-          updated_at: new Date(),
-        },
+        data: updateDespesaData,
       });
+
+      const updatePasseioData: any = {};
+      if (data.nome) updatePasseioData.nome = data.nome;
+      if (data.tipo_id) {
+        updatePasseioData.tipo_passeio = {
+          connect: { id: data.tipo_id },
+        };
+      }
+      if (data.data) updatePasseioData.data = data.data;
+      updatePasseioData.viagem = {
+        connect: { id: data.viagem_id },
+      };
+      if (data.documento_anexo) {
+        updatePasseioData.documento_anexo = data.documento_anexo;
+      }
+      updatePasseioData.usuario = {
+        connect: { id: viagem.usuario_id },
+      };
+      updatePasseioData.updated_at = new Date();
       
       const passeioAtualizado = await prisma.passeio.update({
         where: { id: data.id },
-        data: {
-          nome: data.nome,
-          tipo_passeio: {
-            connect: { id: data.tipo_id },
-          },
-          data: data.data,
-          viagem: {
-            connect: { id: data.viagem_id },
-          },
-          documento_anexo: data.documento_anexo,
-          usuario: {
-            connect: { id: viagem.usuario_id },
-          },
-          updated_at: new Date(),
-        },
+        data: updatePasseioData,
         include: {
           despesa: {
             select: {
