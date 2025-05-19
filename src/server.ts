@@ -1,6 +1,7 @@
 import e from 'express';
 import { routes } from './routes'
-import { AppError } from './errors/AppError';
+import { errorHandler } from "./middlewares/errorHandler";
+import "express-async-errors";
 
 const express = require('express')
 require('express-async-errors');
@@ -26,21 +27,7 @@ const port = 3333;
 
 app.use(routes);
 
-app.use((err: Error, request: e.Request, response: e.Response, next: e.NextFunction) => {
-
-  if (err instanceof AppError) {
-    return response.status(err.statusCode).json({
-      status: "error",
-      statusCode: err.statusCode,
-      message: err.message
-    });
-  }
-
-  return response.status(500).json({
-    status: "error",
-    message: `Internal server error - ${err.message}`
-  });
-});
-
+//Middleware de erro importado
+app.use(errorHandler);
 
 app.listen(port, () => console.log(`Server is running in port ${port}`))

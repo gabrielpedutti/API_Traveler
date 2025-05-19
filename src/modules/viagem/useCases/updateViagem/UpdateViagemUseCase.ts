@@ -8,7 +8,6 @@ export class UpdateViagemUseCase {
     const updateData: any = {};
 
     if (data.nome) updateData.nome = data.nome;
-    if (data.descricao) updateData.descricao = data.descricao;
     if (data.viagem_destino_id) updateData.viagem_destino_id = data.viagem_destino_id;
     if (data.data_inicio) updateData.data_inicio = data.data_inicio;
     if (data.data_fim) updateData.data_fim = data.data_fim;
@@ -18,7 +17,6 @@ export class UpdateViagemUseCase {
     try {
       const hasOptionalField =
         data.nome ||
-        data.descricao ||
         data.viagem_destino_id ||
         data.data_inicio ||
         data.data_fim ||
@@ -26,7 +24,18 @@ export class UpdateViagemUseCase {
         data.status_viagem_id;
 
       if (!data.id || !hasOptionalField) {
-        throw new AppError("Pelo menos um campo deve ser preenchido para atualizar os dados da viagem.");
+        throw new AppError("Pelo menos um campo deve ser preenchido para atualizar os dados da viagem.", 400, {
+        id: data.id,
+        camposRecebidos: updateData,
+      });
+      }
+
+        const viagemExistente = await prisma.viagem.findUnique({
+          where: { id: data.id },
+      });
+
+      if (!viagemExistente) {
+        throw new AppError("Viagem não encontrada.", 404, { id: data.id });
       }
 
       const viagem = await prisma.viagem.update({
@@ -37,8 +46,11 @@ export class UpdateViagemUseCase {
       });
 
       return viagem;
-    } catch (error) {
-      throw new AppError("Erro ao atualizar a viagem: " + error);
+    } catch (error: any) {
+      if (error instanceof AppError) throw error;
+      throw new AppError("Erro interno ao atualizar a viagem: ", 500, {
+        cause: error.message ?? error,
+      });
     }
   }
 }

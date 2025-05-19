@@ -12,7 +12,7 @@ export class DeleteViagemUseCase {
       });
 
       if (!viagem) {
-        throw new AppError("Viagem não encontrada.");
+        throw new AppError("Viagem não encontrada.", 404, { id: data.id });
       }
 
       // Deleta o viagem
@@ -21,8 +21,13 @@ export class DeleteViagemUseCase {
       });
 
       return viagemDeletado;
-    } catch (error) {
-      throw new Error("Erro ao deletar a viagem: " + error);
+    } catch (error: any) {
+      if (error instanceof AppError) throw error;
+
+      throw new AppError("Erro ao deletar a viagem", 500, {
+        cause: error.message ?? error,
+        id: data.id,
+      });
     }
   }
 }

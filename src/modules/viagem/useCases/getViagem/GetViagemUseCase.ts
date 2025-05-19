@@ -37,12 +37,18 @@ export class GetViagemUseCase {
         },
       });
       return viagem;
-    } catch (error) {
-        if (error instanceof Error) {
-        throw new AppError('Erro ao buscar o viagem: ' + error.message, 500);
-      } else {
-        throw new AppError('Erro desconhecido ao buscar o viagem', 500);
+    } catch (error: any) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        throw new AppError("Viagem não encontrada.", 404, { id: data.id });
       }
+
+      throw new AppError("Erro ao buscar a viagem.", 500, {
+        cause: error.message ?? error,
+        id: data.id,
+      });
     }
   }
 }
