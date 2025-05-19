@@ -2,6 +2,8 @@ import e from 'express';
 import { routes } from './routes'
 import { errorHandler } from "./middlewares/errorHandler";
 import "express-async-errors";
+import { swaggerSpec } from "./docs/swaggerConfig";
+import swaggerUi from "swagger-ui-express";
 
 const express = require('express')
 require('express-async-errors');
@@ -29,5 +31,8 @@ app.use(routes);
 
 //Middleware de erro importado
 app.use(errorHandler);
+
+//Swagger
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(port, () => console.log(`Server is running in port ${port}`))
