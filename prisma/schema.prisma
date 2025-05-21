@@ -79,7 +79,7 @@ model Despesa {
   valor                   Float
   data                    DateTime
   viagem_id               Int
-  viagem                  Viagem     @relation("ViagemDespesas", fields: [viagem_id], references: [id])
+  viagem                  Viagem     @relation("ViagemDespesas", fields: [viagem_id], references: [id], onDelete: Cascade)
   tipo_despesa_id         Int
   tipo_despesa            TipoDespesa @relation("DespesaTipo", fields: [tipo_despesa_id], references: [id])
   created_at              DateTime   @default(now())
@@ -104,9 +104,9 @@ model Hospedagem {
   despesa_id              Int
   despesa                 Despesa        @relation("DespesaHospedagens", fields: [despesa_id], references: [id], onDelete: Cascade)
   viagem_id               Int
-  viagem                  Viagem         @relation("ViagemHospedagens", fields: [viagem_id], references: [id])
-  endereco                String
-  documento_anexo         String
+  viagem                  Viagem         @relation("ViagemHospedagens", fields: [viagem_id], references: [id], onDelete: Cascade)
+  endereco                String?
+  documento_anexo         String?
   created_at              DateTime       @default(now())
   updated_at              DateTime       @updatedAt
   usuario_id              Int
@@ -124,8 +124,8 @@ model Passeio {
   despesa_id              Int
   despesa                 Despesa     @relation("DespesaPasseios", fields: [despesa_id], references: [id], onDelete: Cascade)
   viagem_id               Int
-  viagem                  Viagem      @relation("ViagemPasseios", fields: [viagem_id], references: [id])
-  documento_anexo         String
+  viagem                  Viagem      @relation("ViagemPasseios", fields: [viagem_id], references: [id], onDelete: Cascade)
+  documento_anexo         String?
   created_at              DateTime    @default(now())
   updated_at              DateTime    @updatedAt
   usuario_id              Int
@@ -143,10 +143,10 @@ model Transporte {
   despesa_id              Int
   despesa                 Despesa        @relation("DespesaTransportes", fields: [despesa_id], references: [id], onDelete: Cascade)
   viagem_id               Int
-  viagem                  Viagem         @relation("ViagemTransportes", fields: [viagem_id], references: [id])
+  viagem                  Viagem         @relation("ViagemTransportes", fields: [viagem_id], references: [id], onDelete: Cascade)
   transporte_destino_id   Int
   transporte_destino      Municipio      @relation("TransporteDestino", fields: [transporte_destino_id], references: [id])
-  documento_anexo         String
+  documento_anexo         String?
   created_at              DateTime       @default(now())
   updated_at              DateTime       @updatedAt
   usuario_id              Int
