@@ -21,7 +21,7 @@ transporteRoutes.post("/", createTransporteController.handle); // Criação de t
 transporteRoutes.get("/", getAllTransportesController.handle); // Listagem de transportes
 transporteRoutes.get("/usuario/:id", getAllTransportesPorUsuarioController.handle); 
 transporteRoutes.get("/viagem/:id", getAllTransportesPorViagemController.handle); 
-transporteRoutes.get("'/:id", getTransporteController.handle); // Busca de transporte
+transporteRoutes.get("/:id", getTransporteController.handle); // Busca de transporte
 transporteRoutes.delete("/:id/delete", deleteTransporteController.handle); // Exclusão de transporte
 transporteRoutes.put("/:id/update", updateTransporteController.handle); // Atualização de transporte
 

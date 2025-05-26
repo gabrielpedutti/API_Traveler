@@ -19,7 +19,7 @@ const hospedagemRoutes = Router();
 
 hospedagemRoutes.post("/", createHospedagemController.handle); // Criação de hospedagem
 hospedagemRoutes.get("/", getAllHospedagensController.handle); // Listagem de hospedagem
-hospedagemRoutes.get("'/:id", getHospedagemController.handle); // Busca de hospedagem
+hospedagemRoutes.get("/:id", getHospedagemController.handle); // Busca de hospedagem
 hospedagemRoutes.get("/usuario/:id", getAllHospedagensPorUsuarioController.handle);
 hospedagemRoutes.get("/viagem/:id", getAllHospedagensPorViagemController.handle);
 hospedagemRoutes.delete("/:id/delete", deleteHospedagemController.handle); // Exclusão de hospedagem
