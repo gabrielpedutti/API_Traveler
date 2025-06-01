@@ -18,15 +18,15 @@ export class CreateHospedagemUseCase {
     });
 
     if (!viagemExiste) {
-      throw new AppError("Viagem não encontrada.");
+      throw new AppError("Viagem inexistente!", 404);
     }
 
     if (!tipoExiste) {
-      throw new AppError("Tipo não encontrado.");
+      throw new AppError("Tipo não encontrado.", 404);
     }
     
     if (!tipoDespesaExiste) {
-      throw new AppError("Tipo de despesa 'hospedagem' não encontrado.");
+      throw new AppError("Tipo de despesa 'hospedagem' não encontrado.", 404);
     }
 
     // Usando uma transação para garantir atomicidade
@@ -64,14 +64,13 @@ export class CreateHospedagemUseCase {
 
       return novaHospedagem;
     } catch (error: any) {
-      // Captura erros da transação ou outros erros de banco de dados
-      // É importante relançar um AppError ou um erro mais específico para o frontend
       if (error instanceof AppError) {
-        throw error; // Se for um erro já tratado por AppError, apenas relança
+        throw error; 
       }
-      // Para outros erros (ex: erro de banco de dados), loga e lança um erro genérico
       console.error("Erro ao criar a hospedagem e despesa:", error);
-      throw new AppError("Erro interno ao criar a hospedagem. Tente novamente mais tarde.");
+      throw new AppError("Erro interno ao criar hospedagem e despesa", 500, {
+      cause: error.message || error,
+    });
     }
   }
 }

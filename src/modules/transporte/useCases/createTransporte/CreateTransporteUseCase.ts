@@ -5,89 +5,63 @@ import { AppError } from "../../../../errors/AppError";
 
 export class CreateTransporteUseCase {
   async execute(data: CreateTransporteDTO): Promise<Transporte> {
-    // Validações específicas (ex.: checar se IDs relacionados existem)
-    const viagemExiste = await prisma.viagem.findUnique({
+    const viagem = await prisma.viagem.findUnique({
       where: { id: data.viagem_id },
     });
 
-    const tipoExiste = await prisma.tipoTransporte.findUnique({
+    const tipo = await prisma.tipoTransporte.findUnique({
       where: { id: data.tipo_id },
     });
 
-    const tipoDespesaExiste = await prisma.tipoDespesa.findUnique({
+    const tipoDespesa = await prisma.tipoDespesa.findUnique({
       where: { id: 2 },
     });
 
-    if (!viagemExiste) {
-      throw new AppError("Viagem não encontrada.");
-    }
-
-    if (!tipoExiste) {
-      throw new AppError("Tipo não encontrado.");
-    }
-    
-    if (!tipoDespesaExiste) {
-      throw new AppError("Tipo de despesa 'transporte' não encontrado.");
-    }
-
-    const destinoExiste = await prisma.municipio.findUnique({
+    const destino = await prisma.municipio.findUnique({
       where: { id: data.transporte_destino_id },
     });
 
-    if (!destinoExiste) {
-      throw new AppError("Município de destino não encontrado.");
-    }
-
+    if (!viagem) throw new AppError("Viagem não encontrada.", 404);
+    if (!tipo) throw new AppError("Tipo de transporte não encontrado.", 404);
+    if (!tipoDespesa) throw new AppError("Tipo de despesa 'transporte' não encontrado.", 404);
+    if (!destino) throw new AppError("Município de destino não encontrado.", 404);
 
     try {
-      const novaDespesa = await prisma.despesa.create({
-        data: {
-          descricao: data.nome,
-          valor: data.valor,
-          data: data.data,
-          viagem: {
-            connect: { id: data.viagem_id },
-          },
-          tipo_despesa: {
-            connect: { id: 2 },
-          },
-          usuario: {
-            connect: { id: viagemExiste.usuario_id },
-          },
-        },
-      });
-
-      try {
-        const novoTransporte = await prisma.transporte.create({
+      const novoTransporte = await prisma.$transaction(async (tx) => {
+        const novaDespesa = await tx.despesa.create({
           data: {
-            nome: data.nome,
-            tipo_transporte: {
-              connect: { id: data.tipo_id },
-            },
+            descricao: data.nome,
+            valor: data.valor,
             data: data.data,
-            documento_anexo: data.documento_anexo,
-            despesa: {
-              connect: { id: novaDespesa.id },
-            },
-            viagem: {
-              connect: { id: data.viagem_id },
-            },
-            transporte_destino: {
-              connect: { id: data.transporte_destino_id },
-            },
-            usuario: {
-              connect: { id: viagemExiste.usuario_id },
-            },
-            created_at: new Date(),
+            viagem_id: data.viagem_id,
+            tipo_despesa_id: 2,
+            usuario_id: viagem.usuario_id,
           },
         });
 
-        return novoTransporte;
-      } catch (error) {
-        throw new Error("Erro ao criar o transporte: " + error);
-      }
-    } catch (error) {
-      throw new Error("Erro ao criar a despesa do transporte: " + error);
+        const transporteCriado = await tx.transporte.create({
+          data: {
+            nome: data.nome,
+            tipo_id: data.tipo_id,
+            data: data.data,
+            despesa_id: novaDespesa.id,
+            viagem_id: data.viagem_id,
+            transporte_destino_id: data.transporte_destino_id,
+            documento_anexo: data.documento_anexo || null,
+            usuario_id: viagem.usuario_id,
+          },
+        });
+
+        return transporteCriado;
+      });
+
+      return novoTransporte;
+    } catch (error: any) {
+      console.error("Erro ao criar transporte e despesa:", error);
+
+      if (error instanceof AppError) throw error;
+
+      throw new AppError("Erro interno ao criar o transporte. Tente novamente mais tarde.");
     }
   }
 }
