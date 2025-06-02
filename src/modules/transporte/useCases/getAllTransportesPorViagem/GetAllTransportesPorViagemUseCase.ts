@@ -3,11 +3,11 @@ import { prisma } from "../../../../prisma/client";
 import { GetTransporteDTO } from "../../dtos/GetTransporteDTO";
 
 export class GetAllTransportesPorViagemUseCase {
-  async execute(data:GetTransporteDTO): Promise<Transporte[]> {
-    const transportes = await prisma.transporte.findMany({
+  async execute(data: GetTransporteDTO): Promise<Transporte[]> {
+    const transportesComRelacoes = await prisma.transporte.findMany({
       where: {
         viagem: {
-          id: data.id, // Filtrar por id da viagem
+          id: data.id,
         },
       },
       include: {
@@ -18,12 +18,45 @@ export class GetAllTransportesPorViagemUseCase {
         },
         despesa: {
           select: {
-            valor: true
-          }
-        }
+            valor: true,
+          },
+        },
+        transporte_destino: {
+          select: {
+            nm_municipio: true,
+            estado: {
+              select: {
+                nm_estado: true,
+                pais: {
+                  select: {
+                    nm_pais: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
 
-    return transportes;
+    const transportesTransformados = transportesComRelacoes.map((transporte) => {
+      const { transporte_destino, ...restoDoTransporte } = transporte;
+
+      let tdTransformado = null;
+      if (transporte_destino) {
+        tdTransformado = {
+          nm_municipio: transporte_destino.nm_municipio,
+          nm_estado: transporte_destino.estado?.nm_estado,
+          nm_pais: transporte_destino.estado?.pais?.nm_pais,
+        };
+      }
+
+      return {
+        ...restoDoTransporte,
+        transporte_destino: tdTransformado,
+      };
+    });
+
+    return transportesTransformados as Transporte[];
   }
 }
