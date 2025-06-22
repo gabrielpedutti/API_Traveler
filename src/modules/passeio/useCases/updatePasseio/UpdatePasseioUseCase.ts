@@ -41,7 +41,7 @@ export class UpdatePasseioUseCase {
       updatePasseioData.viagem = {
         connect: { id: data.viagem_id },
       };
-      if (data.documento_anexo) {
+      if (data.documento_anexo !== undefined) {
         updatePasseioData.documento_anexo = data.documento_anexo;
       }
       updatePasseioData.usuario = {

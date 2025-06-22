@@ -74,7 +74,7 @@ export class UpdateTransporteUseCase {
           connect: { id: data.transporte_destino_id },
         };
       }
-      if (data.documento_anexo) {
+      if (data.documento_anexo !== undefined) {
         updateTransporteData.documento_anexo = data.documento_anexo;
       }
       updateTransporteData.updated_at = new Date()

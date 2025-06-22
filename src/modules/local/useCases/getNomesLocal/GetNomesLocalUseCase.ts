@@ -16,6 +16,7 @@ export class GetNomesLocalUseCase {
             pais: {
               select: {
                 nm_pais: true, // Nome do país
+                id: true, // ID do país
               },
             },
           },

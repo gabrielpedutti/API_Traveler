@@ -46,7 +46,7 @@ export class UpdateHospedagemUseCase {
       };
 
       if (data.endereco) updateHospedagemData.endereco = data.endereco;
-      if (data.documento_anexo) updateHospedagemData.documento_anexo = data.documento_anexo;
+      if (data.documento_anexo !== undefined) updateHospedagemData.documento_anexo = data.documento_anexo;
 
       updateHospedagemData.updated_at = new Date();
 
