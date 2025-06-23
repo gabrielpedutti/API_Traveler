@@ -20,6 +20,12 @@ export class DeleteTransporteUseCase {
         where: { id: data.id },
       });
 
+      const { despesa_id } = transporte;
+
+      await prisma.despesa.delete({
+        where: { id: despesa_id },
+      });
+
       return transporteDeletado;
     } catch (error) {
       throw new Error("Erro ao deletar o transporte: " + error);
